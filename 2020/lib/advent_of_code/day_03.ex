@@ -1,9 +1,8 @@
 defmodule AdventOfCode.Day03 do
   def part1(args) do
-    width = String.length(Enum.fetch!(args, 0))
     map = parse_map(args)
 
-    count_trees(map, get_slope(3, 1, width))
+    count_trees(map, get_slope(3, 1))
   end
 
   defp count_trees(map, slope) do
@@ -22,29 +21,26 @@ defmodule AdventOfCode.Day03 do
     Enum.fetch!(map, y) |> Enum.fetch!(x)
   end
 
-  defp get_slope(right, down, width) do
-    fn x, y -> {rem(x + right, width), y + down} end
+  defp get_slope(right, down) do
+    fn x, y -> {x + right, y + down} end
   end
 
   defp parse_map(lines) do
     lines
-    |> Enum.reduce([], fn row, out_acc ->
-      out_acc ++
-        [
-          String.codepoints(row)
-          |> Enum.reduce([], fn char, acc ->
-            case char do
-              "." -> acc ++ [0]
-              "#" -> acc ++ [1]
-              _ -> acc
-            end
-          end)
-        ]
+    |> Enum.map(fn row ->
+      String.codepoints(row)
+      |> Enum.reduce([], fn char, acc ->
+        case char do
+          "." -> acc ++ [0]
+          "#" -> acc ++ [1]
+          _ -> acc
+        end
+      end)
+      |> Stream.cycle
     end)
   end
 
   def part2(args) do
-    width = String.length(Enum.fetch!(args, 0))
     map = parse_map(args)
 
     [
@@ -54,7 +50,7 @@ defmodule AdventOfCode.Day03 do
       {7, 1},
       {1, 2}
     ]
-    |> Enum.map(fn {right, down} -> get_slope(right, down, width) end)
+    |> Enum.map(fn {right, down} -> get_slope(right, down) end)
     |> Enum.map(&(count_trees(map, &1)))
     |> Enum.reduce(&(&1*&2))
   end
