@@ -11,22 +11,25 @@ defmodule AdventOfCode.Day04 do
 
   defp parse_passport(input) do
     String.split(input, "\n\n")
-    |> Enum.map(fn passport ->
+    |> Stream.map(fn passport ->
       passport
       |> String.split(~r/[\n\s]/, trim: true)
-      |> Enum.map(fn attribute ->
-        attribute
-        |> String.split(":")
-      end)
-      |> Enum.map(fn [a, b] -> {a, b} end)
+      |> Stream.map(&String.split(&1, ":"))
+      |> Stream.map(fn [a, b] -> {a, b} end)
       |> Map.new()
     end)
   end
 
+  defp has_required_fields(passport) do
+    MapSet.subset?(MapSet.new(@required_fields), MapSet.new(Map.keys(passport)))
+  end
+
   defp numeric_rule(min, max) do
     fn x ->
-      {x_int, _} = Integer.parse(x)
-      x_int >= min && x_int <= max
+      case Integer.parse(x) do
+        {x, _} -> x >= min && x <= max
+        _ -> false
+      end
     end
   end
 
@@ -37,10 +40,6 @@ defmodule AdventOfCode.Day04 do
 
   defp regex_rule(regex) do
     fn x -> Regex.match?(regex, x) end
-  end
-
-  defp has_required_fields(passport) do
-    MapSet.subset?(MapSet.new(@required_fields), MapSet.new(Map.keys(passport)))
   end
 
   defp height_validator(height_value) do
