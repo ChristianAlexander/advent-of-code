@@ -22,7 +22,8 @@ defmodule AdventOfCode2019.MixProject do
   defp deps do
     [
       {:benchee, "~> 1.0"},
-      {:nimble_parsec, "~> 1.1.0"}
+      {:nimble_parsec, "~> 1.1.0"},
+      {:combinatorics, "~> 0.1.0"}
     ]
   end
 end
