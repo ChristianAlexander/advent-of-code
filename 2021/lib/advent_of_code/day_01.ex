@@ -1,35 +1,18 @@
 defmodule AdventOfCode.Day01 do
   def part1(args) do
-    args = args |> AdventOfCode.Load.numeric_lines() |> Enum.into([])
-
-    [_head | rest] = args
-
-    Enum.zip(args, rest) |> Enum.filter(fn {a, b} -> a < b end) |> Enum.count()
+    args = args |> AdventOfCode.Load.numeric_lines() |> Enum.to_list()
+    Enum.zip(args, Enum.drop(args, 1)) |> Enum.filter(fn {a, b} -> a < b end) |> Enum.count()
   end
 
   def part2(args) do
-    args = args |> AdventOfCode.Load.numeric_lines() |> Enum.into([])
+    args = args |> AdventOfCode.Load.numeric_lines() |> Enum.to_list()
 
-    x =
-      args
-      |> Enum.with_index()
-      |> Enum.map(fn {_, index} ->
-        get_three_sums(index, args)
-      end)
-      |> Enum.filter(&Function.identity/1)
+    three_measurements =
+      Enum.zip([args, Enum.drop(args, 1), Enum.drop(args, 2)])
+      |> Enum.map(fn {a, b, c} -> a + b + c end)
 
-    [_head | rest] = x
-
-    Enum.zip(x, rest) |> Enum.filter(fn {a, b} -> a < b end) |> Enum.count()
-  end
-
-  def get_three_sums(position, args) do
-    x = args |> Enum.slice(position..-1) |> Enum.take(3)
-
-    if Enum.count(x) < 3 do
-      nil
-    else
-      Enum.sum(x)
-    end
+    Enum.zip(three_measurements, Enum.drop(three_measurements, 1))
+    |> Enum.filter(fn {a, b} -> a < b end)
+    |> Enum.count()
   end
 end
