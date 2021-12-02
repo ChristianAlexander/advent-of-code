@@ -9,35 +9,36 @@ defmodule AdventOfCode.Day02 do
         string("up") |> replace(:u)
       ])
 
-    defparsec(
-      :parse,
+    defparsecp(
+      :parse_inner,
       instruction |> ignore(string(" ")) |> integer(min: 1)
     )
+
+    def parse(entry) do
+      {:ok, [direction, count], _, _, _, _} = parse_inner(entry)
+
+      {direction, count}
+    end
   end
 
   def part1(args) do
     instructions =
       args
       |> AdventOfCode.Load.lines()
-      |> Enum.map(&AdventOfCode.Day02.Parser.parse/1)
-      |> Enum.map(fn {:ok, [direction, count], _, _, _, _} ->
-        {direction, count}
-      end)
+      |> Enum.map(&Parser.parse/1)
 
-    horizontal =
+    {horizontal, vertical} =
       instructions
-      |> Enum.filter(fn {direction, _} -> direction == :f end)
-      |> Enum.map(fn {_, amount} -> amount end)
-      |> Enum.sum()
+      |> Enum.reduce({0, 0}, fn
+        {:u, count}, {x, y} ->
+          {x, y - count}
 
-    vertical =
-      instructions
-      |> Enum.reject(fn {direction, _} -> direction == :f end)
-      |> Enum.map(fn
-        {:d, amount} -> amount
-        {:u, amount} -> -1 * amount
+        {:d, count}, {x, y} ->
+          {x, y + count}
+
+        {:f, count}, {x, y} ->
+          {x + count, y}
       end)
-      |> Enum.sum()
 
     horizontal * vertical
   end
@@ -46,10 +47,7 @@ defmodule AdventOfCode.Day02 do
     instructions =
       args
       |> AdventOfCode.Load.lines()
-      |> Enum.map(&AdventOfCode.Day02.Parser.parse/1)
-      |> Enum.map(fn {:ok, [direction, count], _, _, _, _} ->
-        {direction, count}
-      end)
+      |> Enum.map(&Parser.parse/1)
 
     {horizontal, vertical, _} =
       instructions
