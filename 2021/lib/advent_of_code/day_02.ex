@@ -29,18 +29,21 @@ defmodule AdventOfCode.Day02 do
 
     {horizontal, vertical} =
       instructions
-      |> Enum.reduce({0, 0}, fn
-        {:u, count}, {x, y} ->
-          {x, y - count}
-
-        {:d, count}, {x, y} ->
-          {x, y + count}
-
-        {:f, count}, {x, y} ->
-          {x + count, y}
-      end)
+      |> Enum.reduce({0, 0}, &handle_naive_instructions/2)
 
     horizontal * vertical
+  end
+
+  defp handle_naive_instructions({:u, count}, {x, y}) do
+    {x, y - count}
+  end
+
+  defp handle_naive_instructions({:d, count}, {x, y}) do
+    {x, y + count}
+  end
+
+  defp handle_naive_instructions({:f, count}, {x, y}) do
+    {x + count, y}
   end
 
   def part2(args) do
@@ -51,17 +54,20 @@ defmodule AdventOfCode.Day02 do
 
     {horizontal, vertical, _} =
       instructions
-      |> Enum.reduce({0, 0, 0}, fn
-        {:u, count}, {x, y, aim} ->
-          {x, y, aim - count}
-
-        {:d, count}, {x, y, aim} ->
-          {x, y, aim + count}
-
-        {:f, count}, {x, y, aim} ->
-          {x + count, y + aim * count, aim}
-      end)
+      |> Enum.reduce({0, 0, 0}, &handle_aim_instructions/2)
 
     horizontal * vertical
+  end
+
+  defp handle_aim_instructions({:u, count}, {x, y, aim}) do
+    {x, y, aim - count}
+  end
+
+  defp handle_aim_instructions({:d, count}, {x, y, aim}) do
+    {x, y, aim + count}
+  end
+
+  defp handle_aim_instructions({:f, count}, {x, y, aim}) do
+    {x + count, y + aim * count, aim}
   end
 end
