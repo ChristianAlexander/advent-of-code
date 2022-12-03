@@ -7,8 +7,8 @@ defmodule AdventOfCode.Load do
     |> Stream.map(&elem(&1, 0))
   end
 
-  def lines(input_string) do
+  def lines(input_string, trim \\ true) do
     input_string
-    |> String.split("\n", trim: true)
+    |> String.split("\n", trim: trim)
   end
 end

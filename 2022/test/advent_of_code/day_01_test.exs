@@ -3,19 +3,32 @@ defmodule AdventOfCode.Day01Test do
 
   import AdventOfCode.Day01
 
-  @tag :skip
-  test "part1" do
-    input = nil
-    result = part1(input)
+  @shared_input """
+  1000
+  2000
+  3000
 
-    assert result
+  4000
+
+  5000
+  6000
+
+  7000
+  8000
+  9000
+
+  10000
+  """
+
+  test "part1" do
+    result = part1(@shared_input)
+
+    assert result == 24000
   end
 
-  @tag :skip
   test "part2" do
-    input = nil
-    result = part2(input)
+    result = part2(@shared_input)
 
-    assert result
+    assert result == 45000
   end
 end
