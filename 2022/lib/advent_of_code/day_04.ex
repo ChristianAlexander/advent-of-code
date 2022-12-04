@@ -2,9 +2,9 @@ defmodule AdventOfCode.Day04 do
   defmodule Parser do
     import NimbleParsec
 
-    assignment = integer(min: 1) |> ignore(string("-")) |> integer(min: 1)
+    assignment = integer(min: 1) |> ignore(ascii_char([?-])) |> integer(min: 1)
 
-    defparsecp(:assignment_pair, assignment |> ignore(string(",")) |> concat(assignment))
+    defparsecp(:assignment_pair, assignment |> ignore(ascii_char([?,])) |> concat(assignment))
 
     def parse(line) do
       {:ok, [a_start, a_end, b_start, b_end], _, _, _, _} = assignment_pair(line)
