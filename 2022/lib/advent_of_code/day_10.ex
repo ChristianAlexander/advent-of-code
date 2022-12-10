@@ -4,12 +4,11 @@ defmodule AdventOfCode.Day10 do
 
     cycle_values =
       AdventOfCode.Load.lines(args)
-      |> Enum.map(&String.split/1)
       |> Enum.reduce({1, 1, []}, fn
-        ["noop"], {cycle, x, history} ->
+        "noop", {cycle, x, history} ->
           {cycle + 1, x, history}
 
-        ["addx", amount], {cycle, x, history} ->
+        "addx " <> amount, {cycle, x, history} ->
           amount = String.to_integer(amount)
           {cycle + 2, x + amount, [{cycle + 2, x + amount} | history]}
       end)
@@ -30,12 +29,11 @@ defmodule AdventOfCode.Day10 do
   def part2(args) do
     cycle_values =
       AdventOfCode.Load.lines(args)
-      |> Enum.map(&String.split/1)
       |> Enum.reduce({1, 1, [1]}, fn
-        ["noop"], {cycle, x, history} ->
+        "noop", {cycle, x, history} ->
           {cycle + 1, x, [x | history]}
 
-        ["addx", amount], {cycle, x, history} ->
+        "addx " <> amount, {cycle, x, history} ->
           amount = String.to_integer(amount)
           {cycle + 2, x + amount, Enum.concat([x + amount, x], history)}
       end)
@@ -43,15 +41,11 @@ defmodule AdventOfCode.Day10 do
       |> Enum.reverse()
       |> Enum.take(240)
 
-    crt_values =
-      Enum.zip(0..239, cycle_values)
-      |> Enum.map(fn {cycle, value} ->
-        if rem(cycle, 40) in (value - 1)..(value + 1), do: "#", else: "."
-      end)
-
-    0..5
-    |> Enum.map(fn row ->
-      Enum.drop(crt_values, row * 40) |> Enum.take(40) |> Enum.join()
+    Enum.zip(0..239, cycle_values)
+    |> Enum.map(fn {cycle, value} ->
+      if rem(cycle, 40) in (value - 1)..(value + 1), do: "█", else: " "
     end)
+    |> Enum.chunk_every(40)
+    |> Enum.map(&Enum.join/1)
   end
 end
