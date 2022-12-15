@@ -8,10 +8,10 @@ defmodule Mix.Tasks.D15.P1 do
     input = AdventOfCode.Input.get!(15, 2022)
 
     if Enum.member?(args, "-b"),
-      do: Benchee.run(%{part_1: fn -> input |> part1() end}),
+      do: Benchee.run(%{part_1: fn -> input |> part1(2_000_000) end}),
       else:
         input
-        |> part1()
+        |> part1(2_000_000)
         |> IO.inspect(label: "Part 1 Results")
   end
 end
