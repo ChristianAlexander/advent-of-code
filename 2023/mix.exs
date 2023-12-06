@@ -26,6 +26,7 @@ defmodule AdventOfCode.MixProject do
     [
       {:benchee, "~> 1.0"},
       {:nimble_parsec, "~> 1.2"},
+      {:libgraph, "~> 0.16"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
