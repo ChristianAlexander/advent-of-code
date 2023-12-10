@@ -12,6 +12,6 @@ defmodule Mix.Tasks.D10.P2 do
       else:
         input
         |> part2()
-        |> Enum.each(&IO.puts/1)
+        |> IO.inspect(label: "Part 2 Results")
   end
 end
