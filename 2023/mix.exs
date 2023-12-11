@@ -28,6 +28,7 @@ defmodule AdventOfCode.MixProject do
       {:nimble_parsec, "~> 1.2"},
       {:libgraph, "~> 0.16"},
       {:rustler, "~> 0.30"},
+      {:combinatorics, "~> 0.1"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
