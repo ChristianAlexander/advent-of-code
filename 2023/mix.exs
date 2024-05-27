@@ -29,6 +29,7 @@ defmodule AdventOfCode.MixProject do
       {:libgraph, "~> 0.16"},
       {:rustler, "~> 0.30"},
       {:combinatorics, "~> 0.1"},
+      {:ssl_verify_fun, "~> 1.1.7", manager: :rebar3, override: true},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
